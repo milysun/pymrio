@@ -36,3 +36,5 @@ tags
 .coverage
 /htmlcov
 /**/htmlcov
+.DS_Store
+*.swp
