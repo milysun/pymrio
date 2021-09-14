@@ -892,7 +892,7 @@ def parse_wiod(path, year=None, names=("isic", "c_codes"), popvector=None):
             fl
             for fl in os.listdir(path)
             if (
-                fl[:6] == wiot_start_rel16 + year_four_digit
+                fl[:8] == wiot_start_rel16 + year_four_digit
                 and os.path.splitext(fl)[1] == wiot_ext_rel16
             )
         ]
@@ -955,7 +955,10 @@ def parse_wiod(path, year=None, names=("isic", "c_codes"), popvector=None):
 
     # Wiod has an unfortunate file structure with overlapping metadata and
     # header. In order to deal with that first the full file is read.
-    wiot_data = pd.read_excel(wiot_file, sheet_name=wiot_sheet, header=None)
+    if wiot_file.endswith(wiot_ext_rel16):
+        wiot_data = pd.read_excel(wiot_file, sheet_name=wiot_sheet, header=None, engine='pyxlsb')
+    else:
+        wiot_data = pd.read_excel(wiot_file, sheet_name=wiot_sheet, header=None)
 
     meta_rec._add_fileio("WIOD data parsed from {}".format(wiot_file))
     # get meta data
